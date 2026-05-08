@@ -1,5 +1,7 @@
 import 'package:akilichat/bloc/chat_state.dart';
 import 'package:akilichat/bloc/chta_bloc.dart';
+import 'package:akilichat/widgets/chat_input.dart';
+import 'package:akilichat/widgets/message_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
