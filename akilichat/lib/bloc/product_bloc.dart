@@ -1,7 +1,8 @@
+import 'package:akilichat/service/api_practice.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'product_event.dart';
 import 'product_state.dart';
-import '../services/product_service.dart';
+
 
 // We specify that this Bloc accepts ProductEvents and outputs ProductStates
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
