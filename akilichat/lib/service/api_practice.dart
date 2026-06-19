@@ -21,15 +21,16 @@ class ProductService {
       throw Exception('Network error occurred: $e');
     }
   }
-
-  Future<ProductModel> createProduct(ProductModel newProduct) async {
-    final Uri url = Uri.parse('$_baseurl/products');
+Future<ProductModel> createProduct(ProductModel newProduct, String userToken) async {
+    final url = Uri.parse('$_baseurl/products');
 
     try {
-      final http.Response response = await http.post(
-        url, // Fixed: Changed from 'url' to 'Uri' parameter position
+      final response = await http.post(
+        url,
         headers: {
           'Content-Type': 'application/json',
+          // TIER 1 SECURITY: Attach the secure token to the request envelope
+          'Authorization': 'Bearer $userToken',
         },
         body: json.encode(newProduct.toJson()),
       );
@@ -37,11 +38,17 @@ class ProductService {
       if (response.statusCode == 201) {
         final Map<String, dynamic> decodedData = json.decode(response.body);
         return ProductModel.fromJson(decodedData);
+      } 
+      // TIER 1 SECURITY: Handle explicit authorization rejections gracefully
+      else if (response.statusCode == 403) {
+        throw Exception('Access Denied: You do not have permission to add products.');
+      } else if (response.statusCode == 401) {
+        throw Exception('Session Expired: Please log in again.');
       } else {
-        throw Exception('Failed to save data: Server returned status ${response.statusCode}');
+        throw Exception('Failed to save product: Server error (${response.statusCode})');
       }
     } catch (e) {
-      throw Exception('Network error occurred while saving data: $e');
+      throw Exception('Network error: $e');
     }
   }
 }
