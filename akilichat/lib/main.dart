@@ -1,10 +1,17 @@
-import 'package:akilichat/bloc/chta_bloc.dart';
-import 'package:akilichat/screens/chat_pag.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'models/p_model.dart';
 
+void main() async {
+  // 1. Establish bridge connections to the phone OS native background engine
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  // 2. Map out directory routes for sandboxed data file systems
+  await Hive.initFlutter();
+
+  // 3. Register the binary translator blueprint for Product Model schemas
+  Hive.registerAdapter(ProductModelAdapter());
+
   runApp(const MyApp());
 }
 
@@ -13,12 +20,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'AI Assistant',
-      home: BlocProvider(
-        create: (_) => ChatBloc(),
-        child: ChatPage(),
+      home: Scaffold(
+        body: Center(child: Text('Engine Pre-loaded & Connected Safely!')),
       ),
     );
   }
